@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>Admin Menu</h2>
+            <ul>
+                <li><a href="chats.html">Chats</a></li>
+                <li><a href="create_notification.html">Create Notifications</a></li>
+                <li><a href="view_notifications.html">View Notifications</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="timetable.html">Timetable</a></li>
+                <li><a href="notes.html">Notes</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <h1>Welcome, Admin</h1>
+            <p>Manage notifications, events, and more.</p>
+
+            <div class="cards">
+                <div class="card">
+                    <h3>Total Notifications</h3>
+                    <p id="notificationCount">Loading...</p>
+                </div>
+                <div class="card">
+                    <h3>Upcoming Events</h3>
+                    <p id="eventCount">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA0n8LNaPSUimuwzFiH3uLfSEaw4LqYVpg",
+            authDomain: "sauapp2025.firebaseapp.com",
+            projectId: "sauapp2025",
+            storageBucket: "sauapp2025.appspot.com",
+            messagingSenderId: "143635054863",
+            appId: "1:143635054863:web:01a250fce4adeac9433e7a",
+            measurementId: "G-XCF0BGLD4M"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function fetchCounts() {
+            try {
+                const notificationsSnapshot = await getDocs(collection(db, "notifications"));
+                const eventsSnapshot = await getDocs(collection(db, "events"));
+
+                document.getElementById("notificationCount").textContent = notificationsSnapshot.size;
+                document.getElementById("eventCount").textContent = eventsSnapshot.size;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        fetchCounts();
+    </script>
+
+    
+</body>
+</html>

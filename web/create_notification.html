@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Notification</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="create_notification.html">Create Notification</a></li>
+                <li><a href="view_notifications.html">View Notifications</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="timetable.html">Timetable</a></li>
+                <li><a href="notes.html">Notes</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <h1>Create Notification</h1>
+            <form id="notificationForm">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+
+                <label for="priority">Priority:</label>
+                <select id="priority" name="priority" required>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+
+                <label for="target">Target:</label>
+                <input type="text" id="target" name="target" required>
+
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA0n8LNaPSUimuwzFiH3uLfSEaw4LqYVpg",
+            authDomain: "sauapp2025.firebaseapp.com",
+            projectId: "sauapp2025",
+            storageBucket: "sauapp2025.appspot.com",
+            messagingSenderId: "143635054863",
+            appId: "1:143635054863:web:01a250fce4adeac9433e7a",
+            measurementId: "G-XCF0BGLD4M"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Form Submission
+        document.getElementById("notificationForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const title = document.getElementById("title").value;
+            const description = document.getElementById("description").value;
+            const target = document.getElementById("target").value;
+            const priority = document.getElementById("priority").value;
+
+            try {
+                // Add notification to Firestore
+                await addDoc(collection(db, "notifications"), {
+                    creatorid: 224840,
+                    status: "active",
+                    title: title,
+                    description: description,
+                    target: target,
+                    priority: priority,
+                    timestamp: Timestamp.fromDate(new Date())
+                });
+
+                alert("Notification sent successfully!");
+                document.getElementById("notificationForm").reset();
+            } catch (error) {
+                console.error("Error sending notification:", error);
+                alert("Failed to send notification.");
+            }
+        });
+    </script>
+</body>
+</html>

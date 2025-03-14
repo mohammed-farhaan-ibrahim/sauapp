@@ -1,6 +1,7 @@
-// Import Firebase modules
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth, initializeAuth, getReactNativePersistence } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -10,11 +11,18 @@ const firebaseConfig = {
   storageBucket: "sauapp2025.appspot.com",
   messagingSenderId: "143635054863",
   appId: "1:143635054863:web:01a250fce4adeac9433e7a",
-  measurementId: "G-XCF0BGLD4M"
+  measurementId: "G-XCF0BGLD4M",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Enable Auth Persistence
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
+
+// Firestore
 const db = getFirestore(app);
 
-export { db };
+export { app, db, auth };
